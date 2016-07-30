@@ -1,0 +1,72 @@
+
+hello3:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000004000b0 <_start>:
+  4000b0:	59                   	pop    %rcx
+  4000b1:	48 83 f9 03          	cmp    $0x3,%rcx
+  4000b5:	75 1b                	jne    4000d2 <argcError>
+  4000b7:	48 83 c4 08          	add    $0x8,%rsp
+  4000bb:	5e                   	pop    %rsi
+  4000bc:	e8 2e 00 00 00       	callq  4000ef <str_to_int>
+  4000c1:	49 89 c2             	mov    %rax,%r10
+  4000c4:	5e                   	pop    %rsi
+  4000c5:	e8 25 00 00 00       	callq  4000ef <str_to_int>
+  4000ca:	4c 01 d0             	add    %r10,%rax
+  4000cd:	4d 31 e4             	xor    %r12,%r12
+  4000d0:	eb 3b                	jmp    40010d <int_to_str_lf>
+
+00000000004000d2 <argcError>:
+  4000d2:	b8 01 00 00 00       	mov    $0x1,%eax
+  4000d7:	bf 01 00 00 00       	mov    $0x1,%edi
+  4000dc:	48 be 58 01 60 00 00 	movabs $0x600158,%rsi
+  4000e3:	00 00 00 
+  4000e6:	ba 22 00 00 00       	mov    $0x22,%edx
+  4000eb:	0f 05                	syscall 
+  4000ed:	eb 5a                	jmp    400149 <exit>
+
+00000000004000ef <str_to_int>:
+  4000ef:	48 31 c0             	xor    %rax,%rax
+  4000f2:	b9 0a 00 00 00       	mov    $0xa,%ecx
+
+00000000004000f7 <next>:
+  4000f7:	80 3e 00             	cmpb   $0x0,(%rsi)
+  4000fa:	74 10                	je     40010c <return_str>
+  4000fc:	48 f7 e1             	mul    %rcx
+  4000ff:	8a 1e                	mov    (%rsi),%bl
+  400101:	80 eb 30             	sub    $0x30,%bl
+  400104:	48 01 d8             	add    %rbx,%rax
+  400107:	48 ff c6             	inc    %rsi
+  40010a:	eb eb                	jmp    4000f7 <next>
+
+000000000040010c <return_str>:
+  40010c:	c3                   	retq   
+
+000000000040010d <int_to_str_lf>:
+  40010d:	6a 0a                	pushq  $0xa
+  40010f:	49 ff c4             	inc    %r12
+  400112:	bb 0a 00 00 00       	mov    $0xa,%ebx
+
+0000000000400117 <int_to_str>:
+  400117:	48 31 d2             	xor    %rdx,%rdx
+  40011a:	48 f7 f3             	div    %rbx
+  40011d:	48 83 c2 30          	add    $0x30,%rdx
+  400121:	52                   	push   %rdx
+  400122:	49 ff c4             	inc    %r12
+  400125:	48 83 f8 00          	cmp    $0x0,%rax
+  400129:	75 ec                	jne    400117 <int_to_str>
+  40012b:	4c 89 e0             	mov    %r12,%rax
+  40012e:	41 bc 08 00 00 00    	mov    $0x8,%r12d
+  400134:	49 f7 e4             	mul    %r12
+  400137:	48 89 c2             	mov    %rax,%rdx
+  40013a:	b8 01 00 00 00       	mov    $0x1,%eax
+  40013f:	bf 01 00 00 00       	mov    $0x1,%edi
+  400144:	48 89 e6             	mov    %rsp,%rsi
+  400147:	0f 05                	syscall 
+
+0000000000400149 <exit>:
+  400149:	b8 3c 00 00 00       	mov    $0x3c,%eax
+  40014e:	bf 00 00 00 00       	mov    $0x0,%edi
+  400153:	0f 05                	syscall 

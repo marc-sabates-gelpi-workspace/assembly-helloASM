@@ -1,0 +1,72 @@
+
+hello3.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <_start>:
+   0:	59                   	pop    %rcx
+   1:	48 83 f9 03          	cmp    $0x3,%rcx
+   5:	75 1b                	jne    22 <argcError>
+   7:	48 83 c4 08          	add    $0x8,%rsp
+   b:	5e                   	pop    %rsi
+   c:	e8 2e 00 00 00       	callq  3f <str_to_int>
+  11:	49 89 c2             	mov    %rax,%r10
+  14:	5e                   	pop    %rsi
+  15:	e8 25 00 00 00       	callq  3f <str_to_int>
+  1a:	4c 01 d0             	add    %r10,%rax
+  1d:	4d 31 e4             	xor    %r12,%r12
+  20:	eb 3b                	jmp    5d <int_to_str_lf>
+
+0000000000000022 <argcError>:
+  22:	b8 01 00 00 00       	mov    $0x1,%eax
+  27:	bf 01 00 00 00       	mov    $0x1,%edi
+  2c:	48 be 00 00 00 00 00 	movabs $0x0,%rsi
+  33:	00 00 00 
+  36:	ba 22 00 00 00       	mov    $0x22,%edx
+  3b:	0f 05                	syscall 
+  3d:	eb 5a                	jmp    99 <exit>
+
+000000000000003f <str_to_int>:
+  3f:	48 31 c0             	xor    %rax,%rax
+  42:	b9 0a 00 00 00       	mov    $0xa,%ecx
+
+0000000000000047 <next>:
+  47:	80 3e 00             	cmpb   $0x0,(%rsi)
+  4a:	74 10                	je     5c <return_str>
+  4c:	48 f7 e1             	mul    %rcx
+  4f:	8a 1e                	mov    (%rsi),%bl
+  51:	80 eb 30             	sub    $0x30,%bl
+  54:	48 01 d8             	add    %rbx,%rax
+  57:	48 ff c6             	inc    %rsi
+  5a:	eb eb                	jmp    47 <next>
+
+000000000000005c <return_str>:
+  5c:	c3                   	retq   
+
+000000000000005d <int_to_str_lf>:
+  5d:	6a 0a                	pushq  $0xa
+  5f:	49 ff c4             	inc    %r12
+  62:	bb 0a 00 00 00       	mov    $0xa,%ebx
+
+0000000000000067 <int_to_str>:
+  67:	48 31 d2             	xor    %rdx,%rdx
+  6a:	48 f7 f3             	div    %rbx
+  6d:	48 83 c2 30          	add    $0x30,%rdx
+  71:	52                   	push   %rdx
+  72:	49 ff c4             	inc    %r12
+  75:	48 83 f8 00          	cmp    $0x0,%rax
+  79:	75 ec                	jne    67 <int_to_str>
+  7b:	4c 89 e0             	mov    %r12,%rax
+  7e:	41 bc 08 00 00 00    	mov    $0x8,%r12d
+  84:	49 f7 e4             	mul    %r12
+  87:	48 89 c2             	mov    %rax,%rdx
+  8a:	b8 01 00 00 00       	mov    $0x1,%eax
+  8f:	bf 01 00 00 00       	mov    $0x1,%edi
+  94:	48 89 e6             	mov    %rsp,%rsi
+  97:	0f 05                	syscall 
+
+0000000000000099 <exit>:
+  99:	b8 3c 00 00 00       	mov    $0x3c,%eax
+  9e:	bf 00 00 00 00       	mov    $0x0,%edi
+  a3:	0f 05                	syscall 
